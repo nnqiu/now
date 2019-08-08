@@ -14,6 +14,22 @@ module.exports = (env, argv) => {
             "babel-polyfill",
             path.join(__dirname, './src/index.js')
         ],
+        output:{
+            path:path.resolve(__dirname, 'dist'),
+            filename:"main.js"
+        },
+        plugins: [
+            new HtmlWebPackPlugin({
+                template: "./src/index.html",
+                filename: "./index.html"
+            }),
+            new MiniCssExtractPlugin({
+              filename: "[name].css",
+              chunkFilename: "[id].css"
+            }),
+            // new CleanWebpackPlugin(['dist']),
+            new VueLoaderPlugin()
+        ],
         module: {
             rules: [
                 // 转换es6代码
@@ -54,18 +70,6 @@ module.exports = (env, argv) => {
                 },
             ]
         },
-        plugins: [
-            new HtmlWebPackPlugin({
-                template: "./src/index.html",
-                filename: "./index.html"
-            }),
-            new MiniCssExtractPlugin({
-              filename: "[name].css",
-              chunkFilename: "[id].css"
-            }),
-            new CleanWebpackPlugin(['dist']),
-            new VueLoaderPlugin()
-          ]
     }
     
 }
