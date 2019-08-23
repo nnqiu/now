@@ -8,6 +8,8 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack --mode development --module-bind js=babel-loader",
         "build": "webpack --mode production --module-bind js=babel-loader",
+        "generateAnalyzFile": "webpack --profile --json > stats.json",
+        "analyz": "webpack-bundle-analyzer --port 8888 ./dist/stats.json",
         "now-dev": "webpack-dev-server --mode development --open",
         "now-build": "webpack --mode production --module-bind js=babel-loader"
     },
@@ -24,22 +26,25 @@
         "babel-polyfill": "^6.26.0",
         "babel-preset-env": "^1.7.0",
         "clean-webpack-plugin": "^3.0.0",
-        "css-loader": "^3.1.0",
+        "css-loader": "^3.2.0",
         "file-loader": "^4.1.0",
         "html-loader": "^0.5.5",
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "^0.8.0",
         "node-sass": "^4.12.0",
         "postcss-loader": "^3.0.0",
-        "sass-loader": "^7.1.0",
+        "sass-loader": "^7.3.1",
+        "source-map-loader": "^0.2.4",
         "style-loader": "^0.23.1",
         "vue-loader": "^15.7.1",
         "vue-template-compiler": "^2.6.10",
         "webpack": "^4.38.0",
+        "webpack-bundle-analyzer": "^3.4.1",
         "webpack-cli": "^3.3.6",
-        "webpack-dev-server": "^3.7.2"
+        "webpack-dev-server": "^3.8.0"
     },
     "dependencies": {
-        "vue": "^2.6.10"
+        "vue": "^2.6.10",
+        "vuepress-plugin-cat": "^1.0.3"
     }
 }

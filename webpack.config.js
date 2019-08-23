@@ -7,19 +7,36 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+// 打包体积查看插件
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = (env, argv) => {
+    /**  
+     * mode：development production
+     * 会将process.env.NODE_ENV设置成对应的值，然后启动对应的plugin
+     * 注：只设置NODE_ENV是没有用的，必须使用mode
+    */
     const devMode = argv.mode !== 'production'
     return {
         /** 
          * 入口出口文件也可以在package.json覆盖
         */
-        // 入口文件
+        /** 
+         * 单入口 string|Array<string>
+         * 多页面 {pageOne: './src/xx.js, pageTwo: './src/xx.jd'} 每次跳转页面生成新html文档
+         * 使用"babel-polyfill"解决兼容性问题，加到entry数组中
+         * */
         entry: [
             "babel-polyfill",
             path.join(__dirname, './src/index.js')
         ],
-        // 出口文件
+        /**
+         *
+         *
+         * @param filename 输出的文件名
+         * @param path 绝对路径 
+         * @returns
+        */
         output:{
             path: path.resolve(__dirname, 'dist'),
             filename:"main.js"
@@ -38,12 +55,22 @@ module.exports = (env, argv) => {
               chunkFilename: "[id].css"
             }),
             // new CleanWebpackPlugin(['dist']),
-            new VueLoaderPlugin()
+            new VueLoaderPlugin(),
+            new BundleAnalyzerPlugin({
+                analyzerMode: 'disabled', // 不启动展示打包报告的http服务器
+                generateStatsFile: true, // 是否生成stats.json文件
+            })
         ],
         /** 
-         * loader用于转换某些模块的代码
+         * 1.loader用于转换某些模块的代码
          * test：匹配哪些文件
          * use：使用什么loader
+         * 须先npm install
+         * 2.三个地方可以使用loader
+         * a.webpack.config.js
+         * b.代码中import 例：import Styles from 'style-loader!css-loader?modules!./styles.css';
+         * 使用！隔开，都相对于当前目录解析
+         * c.shell
         */
         module: {
             rules: [
@@ -83,6 +110,12 @@ module.exports = (env, argv) => {
                         loaders: {}
                     }
                 },
+                // sourcemap loader
+                {
+                    test: /\.vue$/,
+                    use: ["source-map-loader"],
+                    enforce: "pre"
+                  }
             ]
         },
     }
