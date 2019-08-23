@@ -1,3 +1,4 @@
+// nodejs核心模块，用于操作文件路径
 const path = require('path');
 // webpack 并不会主动将你的css代码提取到一个文件，过去我们使用 extract-text-webpack-plugin，在webpack4中我们使用mini-css-extract-plugin来解决这个问题。
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -10,14 +11,23 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 module.exports = (env, argv) => {
     const devMode = argv.mode !== 'production'
     return {
+        /** 
+         * 入口出口文件也可以在package.json覆盖
+        */
+        // 入口文件
         entry: [
             "babel-polyfill",
             path.join(__dirname, './src/index.js')
         ],
+        // 出口文件
         output:{
-            path:path.resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'dist'),
             filename:"main.js"
         },
+        /** 
+         * plugins插件则可以用于执行范围更广的任务
+         * 先require，然后new
+        */
         plugins: [
             new HtmlWebPackPlugin({
                 template: "./src/index.html",
@@ -30,6 +40,11 @@ module.exports = (env, argv) => {
             // new CleanWebpackPlugin(['dist']),
             new VueLoaderPlugin()
         ],
+        /** 
+         * loader用于转换某些模块的代码
+         * test：匹配哪些文件
+         * use：使用什么loader
+        */
         module: {
             rules: [
                 // 转换es6代码
